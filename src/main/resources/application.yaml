@@ -1,0 +1,24 @@
+logging:
+  level:
+    root: info
+    org.hibernate.jpa: info
+    org.hibernate.sql: info
+    org.hibernate.type: info
+
+server:
+  port: 8080
+  shutdown: graceful
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/moasis
+    username: root
+    password: secret
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    generate-ddl: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
