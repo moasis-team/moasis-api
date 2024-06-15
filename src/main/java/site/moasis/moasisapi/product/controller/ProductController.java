@@ -1,4 +1,4 @@
-package site.moasis.moasisapi.product;
+package site.moasis.moasisapi.product.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import site.moasis.moasisapi.controller.CommonResponse;
+import site.moasis.moasisapi.common.response.CommonResponse;
 import site.moasis.moasisapi.product.dto.ProductReqDto;
+import site.moasis.moasisapi.product.service.ProductService;
 
 @RestController
 @RequestMapping("/api/products")

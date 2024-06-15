@@ -1,4 +1,4 @@
-package site.moasis.moasisapi.product;
+package site.moasis.moasisapi.product.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
