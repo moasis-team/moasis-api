@@ -26,7 +26,7 @@ public class Product {
     private String name;
     private Long price;
     private String category;
-    private String imageId;
+    private String imageUrl;
     private String details;
     private int quantity;
     private String productCode;

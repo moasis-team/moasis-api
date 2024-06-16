@@ -24,3 +24,6 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         show_sql: true
         format_sql: true
+
+app:
+  image-server-url: "/AKfycbwZgC4RNZOiNnylHLbk4rdNmaapEh0rshwLVvY3iV0XYFFw-kLqtg9W23D32UvvX_f2/exec"

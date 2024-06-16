@@ -12,21 +12,21 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+    private final ImageService imageService;
 
     public String createProduct(ProductReqDto productReqDto) {
         String productCode = UUID.randomUUID().toString();
-
+        String imageUrl = imageService.uploadFile(productReqDto.getEncodedFile());
         Product product = Product.builder()
                 .name(productReqDto.getName())
                 .price(productReqDto.getPrice())
                 .category(productReqDto.getCategory())
-                .imageId("") // [Todo] 이미지 서비스 연동
+                .imageUrl(imageUrl)
                 .details(productReqDto.getDetails())
                 .quantity(productReqDto.getQuantity())
                 .productCode(productCode)
                 .productNumber(productReqDto.getProductNumber())
                 .build();
-
         productRepository.save(product);
         return productCode;
     }
