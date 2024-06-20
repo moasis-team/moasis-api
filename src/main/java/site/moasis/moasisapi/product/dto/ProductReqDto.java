@@ -11,7 +11,7 @@ public class ProductReqDto {
     private String name;
     private Long price;
     private String details;
-    private String encodedFile;
+    private byte[] encodedFile;
     private String category;
     private int quantity;
     private String productNumber;
