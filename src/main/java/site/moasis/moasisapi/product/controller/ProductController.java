@@ -18,7 +18,7 @@ public class ProductController {
 
     @PostMapping()
     public ResponseEntity<CommonResponse<String>> createProduct(
-            @RequestBody ProductReqDto productReqDto
+        @RequestBody ProductReqDto productReqDto
     ) {
         String productCode = productService.createProduct(productReqDto);
         return CommonResponse.success(productCode, "상품이 등록되었습니다.");
