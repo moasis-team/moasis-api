@@ -2,6 +2,7 @@ package site.moasis.moasisapi.product.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import site.moasis.moasisapi.common.service.ImageService;
 import site.moasis.moasisapi.product.dto.ProductReqDto;
 import site.moasis.moasisapi.product.entity.Product;
 import site.moasis.moasisapi.product.repository.ProductRepository;
