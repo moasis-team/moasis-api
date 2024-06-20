@@ -28,21 +28,21 @@ public class ImageService {
 
     public String uploadFile(String encodedFileBase64) {
         return imageWebClient.post()
-                .uri(imageScriptUrl)
-                .body(BodyInserters.fromFormData("myFile", encodedFileBase64)
-                        .with("mimeType", "image/png")
-                        .with("fileName", "product.png"))
-                .exchangeToMono(this::handleRedirect)
-                .block();
+            .uri(imageScriptUrl)
+            .body(BodyInserters.fromFormData("myFile", encodedFileBase64)
+                .with("mimeType", "image/png")
+                .with("fileName", "product.png"))
+            .exchangeToMono(this::handleRedirect)
+            .block();
     }
 
     private Mono<String> handleRedirect(ClientResponse response) {
         if (response.statusCode().is3xxRedirection()) {
             String location = Objects.requireNonNull(response.headers().asHttpHeaders().getLocation()).toString();
             return imageWebClient.get()
-                    .uri(location)
-                    .retrieve()
-                    .bodyToMono(String.class);
+                .uri(location)
+                .retrieve()
+                .bodyToMono(String.class);
         } else {
             return response.bodyToMono(String.class);
         }
