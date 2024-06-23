@@ -1,18 +1,21 @@
 package site.moasis.moasisapi.product.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
-public class ProductReqDto {
+@Builder
+public class ResGetProductDto {
     private String name;
-    private Long price;
-    private String details;
-    private byte[] encodedFile;
+    private int price;
     private String category;
+    private String imageUrl;
+    private String details;
     private int quantity;
+    private String productCode;
     private String productNumber;
 }
