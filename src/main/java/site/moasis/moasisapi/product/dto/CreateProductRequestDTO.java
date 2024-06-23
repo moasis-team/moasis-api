@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class ProductReqDto {
+public class CreateProductRequestDTO {
     private String name;
-    private Long price;
+    private int price;
     private String details;
     private byte[] encodedFile;
     private String category;
