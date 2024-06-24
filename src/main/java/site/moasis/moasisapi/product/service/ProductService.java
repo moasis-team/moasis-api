@@ -1,16 +1,21 @@
 package site.moasis.moasisapi.product.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import site.moasis.moasisapi.common.exception.BadRequestException;
 import site.moasis.moasisapi.common.exception.NotFoundException;
 import site.moasis.moasisapi.common.service.ImageService;
+import site.moasis.moasisapi.product.dto.ProductDto;
+import site.moasis.moasisapi.product.dto.ProductListDto;
 import site.moasis.moasisapi.product.dto.ReqCreateProductDto;
-import site.moasis.moasisapi.product.dto.ResGetProductDto;
 import site.moasis.moasisapi.product.entity.Product;
 import site.moasis.moasisapi.product.repository.ProductRepository;
 
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -41,10 +46,10 @@ public class ProductService {
         }
     }
 
-    public ResGetProductDto getProduct(String productCode) throws NotFoundException {
+    public ProductDto getProduct(String productCode) throws NotFoundException {
         try {
             Product product = productRepository.findByProductCode(productCode);
-            return ResGetProductDto.builder()
+            return ProductDto.builder()
                 .name(product.getName())
                 .price(product.getPrice())
                 .category(product.getCategory())
@@ -54,6 +59,38 @@ public class ProductService {
                 .productCode(product.getProductCode())
                 .productNumber(product.getProductNumber())
                 .build();
+        } catch (Exception e) {
+            throw new NotFoundException("상품을 찾을 수 없습니다.");
+        }
+    }
+
+    public ProductListDto getProductList(String query, int limit, int pageSize) {
+        try {
+            Pageable pageable = PageRequest.of(limit, pageSize);
+            Slice<Product> productSlice = productRepository.findAllByNameContaining(query, pageable);
+
+            List<ProductDto> productDtoList = productSlice.getContent().stream().map(product -> ProductDto.builder()
+                .name(product.getName())
+                .price(product.getPrice())
+                .category(product.getCategory())
+                .imageUrl(product.getImageUrl())
+                .details(product.getDetails())
+                .quantity(product.getQuantity())
+                .productCode(product.getProductCode())
+                .productNumber(product.getProductNumber())
+                .build()
+            ).toList();
+
+            return ProductListDto.builder()
+                .productList(productDtoList)
+                .sliceMetaData(
+                    ProductListDto.SliceMetaData.builder()
+                        .totalProductQuantity(productSlice.getNumberOfElements())
+                        .hasNext(productSlice.hasNext())
+                        .build()
+                )
+                .build();
+
         } catch (Exception e) {
             throw new NotFoundException("상품을 찾을 수 없습니다.");
         }

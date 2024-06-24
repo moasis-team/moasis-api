@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
-public class ResGetProductDto {
+public class ProductDto {
     private String name;
     private int price;
     private String category;

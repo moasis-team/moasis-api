@@ -14,4 +14,5 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
             .setParameter("productCode", productCode)
             .getSingleResult();
     }
+
 }

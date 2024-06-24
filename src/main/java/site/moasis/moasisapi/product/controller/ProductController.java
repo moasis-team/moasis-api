@@ -4,9 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.moasis.moasisapi.common.response.CommonResponse;
+import site.moasis.moasisapi.product.dto.ProductDto;
+import site.moasis.moasisapi.product.dto.ProductListDto;
 import site.moasis.moasisapi.product.dto.ReqCreateProductDto;
 import site.moasis.moasisapi.product.dto.ResCreateProductDto;
-import site.moasis.moasisapi.product.dto.ResGetProductDto;
 import site.moasis.moasisapi.product.service.ProductService;
 
 @RestController
@@ -25,8 +26,19 @@ public class ProductController {
     }
 
     @GetMapping("/{productCode}")
-    public ResponseEntity<CommonResponse<ResGetProductDto>> getProduct(@PathVariable("productCode") String productCode) {
-        ResGetProductDto resGetProductDto = productService.getProduct(productCode);
+    public ResponseEntity<CommonResponse<ProductDto>> getProduct(@PathVariable("productCode") String productCode) {
+        ProductDto productDto = productService.getProduct(productCode);
+        return CommonResponse.success(productDto, "상품 조회 성공");
+    }
+
+    @GetMapping()
+    public ResponseEntity<CommonResponse<ProductListDto>> getProductList(
+        @RequestParam("query") String query,
+        @RequestParam("limit") int limit,
+        @RequestParam("pageSize") int pageSize
+    ) {
+        ProductListDto resGetProductDto = productService.getProductList(query, limit, pageSize);
         return CommonResponse.success(resGetProductDto, "상품 조회 성공");
     }
+
 }
