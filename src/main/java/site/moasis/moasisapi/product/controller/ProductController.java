@@ -8,6 +8,7 @@ import site.moasis.moasisapi.common.response.CommonResponse;
 import site.moasis.moasisapi.product.dto.CreateProductRequestDTO;
 import site.moasis.moasisapi.product.dto.CreateProductResponseDTO;
 import site.moasis.moasisapi.product.dto.GetProductResponseDTO;
+import site.moasis.moasisapi.product.entity.Product;
 import site.moasis.moasisapi.product.service.ProductService;
 
 @RestController
@@ -31,12 +32,12 @@ public class ProductController {
     }
 
     @GetMapping()
-    public ResponseEntity<CommonResponse<Slice<GetProductResponseDTO>>> getProductList(
+    public ResponseEntity<CommonResponse<Slice<Product>>> getProductList(
         @RequestParam("query") String query,
-        @RequestParam("pageNumber") int pageNumber,
+        @RequestParam("offset") int offset,
         @RequestParam("pageSize") int pageSize
     ) {
-        Slice<GetProductResponseDTO> response = productService.getProductList(query, pageNumber, pageSize);
+        Slice<Product> response = productService.getProductList(query, offset, pageSize);
         return CommonResponse.success(response, "상품 조회 성공");
     }
 
