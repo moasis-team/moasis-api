@@ -33,10 +33,10 @@ public class ProductController {
     @GetMapping()
     public ResponseEntity<CommonResponse<Slice<GetProductResponseDTO>>> getProductList(
         @RequestParam("query") String query,
-        @RequestParam("offset") int offset,
+        @RequestParam("pageNumber") int pageNumber,
         @RequestParam("pageSize") int pageSize
     ) {
-        Slice<GetProductResponseDTO> response = productService.getProductList(query, offset, pageSize);
+        Slice<GetProductResponseDTO> response = productService.getProductList(query, pageNumber, pageSize);
         return CommonResponse.success(response, "상품 조회 성공");
     }
 
