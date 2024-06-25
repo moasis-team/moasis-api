@@ -1,15 +1,11 @@
 package site.moasis.moasisapi.product.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Builder
-public class ProductDto {
+public class GetProductResponseDTO {
     private String name;
     private int price;
     private String category;

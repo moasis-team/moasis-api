@@ -11,6 +11,7 @@ import site.moasis.moasisapi.common.service.ImageService;
 import site.moasis.moasisapi.product.dto.ProductDto;
 import site.moasis.moasisapi.product.dto.ProductListDto;
 import site.moasis.moasisapi.product.dto.ReqCreateProductDto;
+import site.moasis.moasisapi.product.dto.ResCreateProductDto;
 import site.moasis.moasisapi.product.entity.Product;
 import site.moasis.moasisapi.product.repository.ProductRepository;
 
@@ -24,7 +25,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ImageService imageService;
 
-    public String createProduct(ReqCreateProductDto reqCreateProductDto) throws BadRequestException {
+    public ResCreateProductDto createProduct(ReqCreateProductDto reqCreateProductDto) throws BadRequestException {
         String productCode = UUID.randomUUID().toString();
         String base64EncodedFile = Base64.getEncoder().encodeToString(reqCreateProductDto.getEncodedFile());
         String imageUrl = imageService.uploadFile(base64EncodedFile);
@@ -40,7 +41,7 @@ public class ProductService {
                 .productNumber(reqCreateProductDto.getProductNumber())
                 .build();
             productRepository.save(product);
-            return productCode;
+            return new ResCreateProductDto(productCode);
         } catch (Exception e) {
             throw new BadRequestException("상품 등록에 실패했습니다.");
         }

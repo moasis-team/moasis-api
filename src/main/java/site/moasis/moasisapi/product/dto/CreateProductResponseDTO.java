@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class ResCreateProductDto {
+public class CreateProductResponseDTO {
     private String productCode;
 }
