@@ -34,10 +34,10 @@ public class ProductController {
     @GetMapping()
     public ResponseEntity<CommonResponse<ProductListDto>> getProductList(
         @RequestParam("query") String query,
-        @RequestParam("limit") int limit,
+        @RequestParam("offset") int offset,
         @RequestParam("pageSize") int pageSize
     ) {
-        ProductListDto resGetProductDto = productService.getProductList(query, limit, pageSize);
+        ProductListDto resGetProductDto = productService.getProductList(query, offset, pageSize);
         return CommonResponse.success(resGetProductDto, "상품 조회 성공");
     }
 

@@ -64,9 +64,9 @@ public class ProductService {
         }
     }
 
-    public ProductListDto getProductList(String query, int limit, int pageSize) {
+    public ProductListDto getProductList(String query, int offset, int pageSize) {
         try {
-            Pageable pageable = PageRequest.of(limit, pageSize);
+            Pageable pageable = PageRequest.of(offset, pageSize);
             Slice<Product> productSlice = productRepository.findAllByNameContaining(query, pageable);
 
             List<ProductDto> productDtoList = productSlice.getContent().stream().map(product -> ProductDto.builder()
