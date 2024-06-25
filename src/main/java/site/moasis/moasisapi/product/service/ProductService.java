@@ -16,7 +16,6 @@ import site.moasis.moasisapi.product.entity.Product;
 import site.moasis.moasisapi.product.repository.ProductRepository;
 
 import java.util.Base64;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -47,19 +46,16 @@ public class ProductService {
 
     @Transactional()
     public GetProductResponseDTO getProduct(String productCode) throws NotFoundException {
-        Optional<Product> product = productRepository.findByProductCode(productCode);
-        if (product.isEmpty()) {
-            throw new NotFoundException("Product not found");
-        }
+        Product product = productRepository.findByProductCode(productCode).orElseThrow(() -> new NotFoundException("상품을 찾을 수 없습니다."));
 
         return GetProductResponseDTO.builder()
-            .name(product.get().getName())
-            .price(product.get().getPrice())
-            .category(product.get().getCategory())
-            .imageUrl(product.get().getImageUrl())
-            .details(product.get().getDetails())
-            .quantity(product.get().getQuantity())
-            .productNumber(product.get().getProductNumber())
+            .name(product.getName())
+            .price(product.getPrice())
+            .category(product.getCategory())
+            .imageUrl(product.getImageUrl())
+            .details(product.getDetails())
+            .quantity(product.getQuantity())
+            .productNumber(product.getProductNumber())
             .build();
     }
 
