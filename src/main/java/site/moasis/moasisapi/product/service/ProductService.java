@@ -16,6 +16,7 @@ import site.moasis.moasisapi.product.entity.Product;
 import site.moasis.moasisapi.product.repository.ProductRepository;
 
 import java.util.Base64;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -46,23 +47,27 @@ public class ProductService {
 
     @Transactional()
     public GetProductResponseDTO getProduct(String productCode) throws NotFoundException {
-        Product product = productRepository.findByProductCode(productCode);
+        Optional<Product> product = productRepository.findByProductCode(productCode);
+        if (product.isEmpty()) {
+            throw new NotFoundException("Product not found");
+        }
+
         return GetProductResponseDTO.builder()
-            .name(product.getName())
-            .price(product.getPrice())
-            .category(product.getCategory())
-            .imageUrl(product.getImageUrl())
-            .details(product.getDetails())
-            .quantity(product.getQuantity())
-            .productCode(product.getProductCode())
-            .productNumber(product.getProductNumber())
+            .name(product.get().getName())
+            .price(product.get().getPrice())
+            .category(product.get().getCategory())
+            .imageUrl(product.get().getImageUrl())
+            .details(product.get().getDetails())
+            .quantity(product.get().getQuantity())
+            .productNumber(product.get().getProductNumber())
             .build();
     }
 
     @Transactional()
-    public Slice<Product> getProductList(String query, int pageNumber, int pageSize) {
+    public Slice<GetProductResponseDTO> getProductList(String query, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return productRepository.findAllByNameContaining(query, pageable);
+        Slice<Product> response = productRepository.findAllByNameContaining(query, pageable);
+        return GetProductResponseDTO.fromSlice(response);
     }
 }
 
