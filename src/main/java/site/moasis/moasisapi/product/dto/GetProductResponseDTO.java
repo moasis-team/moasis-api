@@ -30,4 +30,17 @@ public class GetProductResponseDTO {
             .build()
         );
     }
+
+    public static GetProductResponseDTO of(Product product) {
+        return GetProductResponseDTO.builder()
+            .name(product.getName())
+            .price(product.getPrice())
+            .category(product.getCategory())
+            .imageUrl(product.getImageUrl())
+            .details(product.getDetails())
+            .quantity(product.getQuantity())
+            .productCode(product.getProductCode())
+            .productNumber(product.getProductNumber())
+            .build();
+    }
 }
