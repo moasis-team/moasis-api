@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.moasis.moasisapi.common.response.CommonResponse;
 import site.moasis.moasisapi.product.dto.CreateProductRequestDTO;
-import site.moasis.moasisapi.product.dto.CreateProductResponseDTO;
 import site.moasis.moasisapi.product.dto.GetProductResponseDTO;
 import site.moasis.moasisapi.product.service.ProductService;
 
@@ -18,10 +17,10 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping()
-    public ResponseEntity<CommonResponse<CreateProductResponseDTO>> createProduct(
+    public ResponseEntity<CommonResponse<String>> createProduct(
         @Valid @RequestBody CreateProductRequestDTO createProductRequestDTO
     ) {
-        CreateProductResponseDTO response = productService.createProduct(createProductRequestDTO);
+        String response = productService.createProduct(createProductRequestDTO);
         return CommonResponse.success(response, "상품이 등록되었습니다.");
     }
 
