@@ -1,5 +1,6 @@
 package site.moasis.moasisapi.product.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class ProductController {
 
     @PostMapping()
     public ResponseEntity<CommonResponse<CreateProductResponseDTO>> createProduct(
-        @RequestBody CreateProductRequestDTO createProductRequestDTO
+        @Valid @RequestBody CreateProductRequestDTO createProductRequestDTO
     ) {
         CreateProductResponseDTO response = productService.createProduct(createProductRequestDTO);
         return CommonResponse.success(response, "상품이 등록되었습니다.");
