@@ -1,6 +1,7 @@
 package site.moasis.moasisapi.common.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -11,19 +12,19 @@ import site.moasis.moasisapi.client.ImageClient;
 
 import java.util.Objects;
 
-
 @Service
 @RequiredArgsConstructor
 public class ImageService implements ImageClient {
 
-    private final WebClient imageWebClient;
+    @Qualifier("imageClient")
+    private final WebClient imageClient;
 
     @Value("${app.image-server-url}")
     private String imageScriptUrl;
 
     @Override
     public String uploadFile(String encodedFileBase64) {
-        return imageWebClient.post()
+        return imageClient.post()
             .uri(imageScriptUrl)
             .body(BodyInserters.fromFormData("myFile", encodedFileBase64)
                 .with("mimeType", "image/png")
@@ -35,7 +36,7 @@ public class ImageService implements ImageClient {
     private Mono<String> handleRedirect(ClientResponse response) {
         if (response.statusCode().is3xxRedirection()) {
             String location = Objects.requireNonNull(response.headers().asHttpHeaders().getLocation()).toString();
-            return imageWebClient.get()
+            return imageClient.get()
                 .uri(location)
                 .retrieve()
                 .bodyToMono(String.class);
