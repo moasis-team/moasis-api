@@ -1,0 +1,12 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+app:
+  image-server-url: "/AKfycbwZgC4RNZOiNnylHLbk4rdNmaapEh0rshwLVvY3iV0XYFFw-kLqtg9W23D32UvvX_f2/exec"
