@@ -20,6 +20,14 @@ spring:
       ddl-auto: create-drop
     generate-ddl: false
     properties:
+      hibernate.default_batch_fetch_size: 10
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      hibernate.jdbc.batch_size: 100
+      hibernate.jdbc.batch_versioned_data: true
+      hibernate.jdbc.time_zone: Asia/Seoul
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         show_sql: true
