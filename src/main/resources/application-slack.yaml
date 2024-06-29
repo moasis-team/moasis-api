@@ -1,0 +1,12 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+app:
+  slack-alert-url: "https://hooks.slack.com/services/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"

@@ -35,3 +35,4 @@ spring:
   config:
     import:
       - classpath:/application-google.yaml
+      - classpath:/application-slack.yaml
