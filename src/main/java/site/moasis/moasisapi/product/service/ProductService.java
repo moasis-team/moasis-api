@@ -19,11 +19,12 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ProductService {
     private final ProductRepository productRepository;
     private final ImageClient imageClient;
 
-    @Transactional()
+    @Transactional
     public String createProduct(CreateProductRequestDTO createProductRequestDTO) {
 
         if (productRepository.existsByProductNumber(createProductRequestDTO.getProductNumber())) {
@@ -39,13 +40,11 @@ public class ProductService {
         return productCode;
     }
 
-    @Transactional()
     public GetProductResponseDTO getProduct(String productCode) {
         Product product = productRepository.findByProductCode(productCode).orElseThrow(() -> new NotFoundException("상품을 찾을 수 없습니다."));
         return GetProductResponseDTO.of(product);
     }
 
-    @Transactional()
     public Slice<GetProductResponseDTO> getProductList(String name, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Slice<Product> response = productRepository.findAllByNameContaining(name, pageable);
