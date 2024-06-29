@@ -7,6 +7,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.moasis.moasisapi.client.ImageClient;
+import site.moasis.moasisapi.common.exception.DuplicatedException;
 import site.moasis.moasisapi.common.exception.NotFoundException;
 import site.moasis.moasisapi.product.dto.CreateProductRequestDTO;
 import site.moasis.moasisapi.product.dto.GetProductResponseDTO;
@@ -24,6 +25,11 @@ public class ProductService {
 
     @Transactional()
     public String createProduct(CreateProductRequestDTO createProductRequestDTO) {
+
+        if (productRepository.existsByProductNumber(createProductRequestDTO.getProductNumber())) {
+            throw new DuplicatedException("상품 번호가 이미 존재합니다");
+        }
+
         String productCode = UUID.randomUUID().toString();
         String base64EncodedFile = Base64.getEncoder().encodeToString(createProductRequestDTO.getEncodedFile());
         String imageUrl = imageClient.uploadFile(base64EncodedFile);

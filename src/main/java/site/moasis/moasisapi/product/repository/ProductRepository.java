@@ -13,4 +13,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByProductCode(String productCode);
 
     Slice<Product> findAllByNameContaining(String name, Pageable pageable);
+
+    Boolean existsByProductNumber(String productNumber);
 }
