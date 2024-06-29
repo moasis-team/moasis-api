@@ -6,8 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.moasis.moasisapi.client.ImageClient;
 import site.moasis.moasisapi.common.exception.NotFoundException;
-import site.moasis.moasisapi.common.service.ImageService;
 import site.moasis.moasisapi.product.dto.CreateProductRequestDTO;
 import site.moasis.moasisapi.product.dto.GetProductResponseDTO;
 import site.moasis.moasisapi.product.entity.Product;
@@ -20,13 +20,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private final ImageService imageService;
+    private final ImageClient imageClient;
 
     @Transactional()
     public String createProduct(CreateProductRequestDTO createProductRequestDTO) {
         String productCode = UUID.randomUUID().toString();
         String base64EncodedFile = Base64.getEncoder().encodeToString(createProductRequestDTO.getEncodedFile());
-        String imageUrl = imageService.uploadFile(base64EncodedFile);
+        String imageUrl = imageClient.uploadFile(base64EncodedFile);
         Product product = createProductRequestDTO.toEntity(productCode, imageUrl);
 
         productRepository.save(product);

@@ -1,5 +1,6 @@
 package site.moasis.moasisapi.common.configuration;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -8,6 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class AppConfiguration {
 
     @Bean("imageWebClient")
+    @ConditionalOnMissingBean
     public WebClient imageWebClient() {
         return WebClient.builder()
             .baseUrl("https://script.google.com/macros/s")

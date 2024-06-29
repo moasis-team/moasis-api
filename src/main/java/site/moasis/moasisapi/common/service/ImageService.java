@@ -1,26 +1,27 @@
 package site.moasis.moasisapi.common.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import site.moasis.moasisapi.client.ImageClient;
 
 import java.util.Objects;
 
+
 @Service
 @RequiredArgsConstructor
-public class ImageService {
+public class ImageService implements ImageClient {
 
-    @Qualifier("imageWebClient")
     private final WebClient imageWebClient;
 
     @Value("${app.image-server-url}")
     private String imageScriptUrl;
 
+    @Override
     public String uploadFile(String encodedFileBase64) {
         return imageWebClient.post()
             .uri(imageScriptUrl)
