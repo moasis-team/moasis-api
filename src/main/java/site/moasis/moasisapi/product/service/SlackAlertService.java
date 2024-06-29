@@ -11,12 +11,13 @@ import site.moasis.moasisapi.common.service.SlackService;
 public class SlackAlertService {
     private final SlackService slackService;
 
-    public void productSaveFailedAlert(String productName, String productNumber) {
+    public void alertFailedProduct
+        (String productName, String productNumber, String methodType) {
         String message = String.format("""
-            [ Product Save Failed ]
+            [ Product Image %s Failed ]
             Product Name: `%s`
             Product Number: `%s`
-            """, productName, productNumber);
+            """, methodType, productName, productNumber);
 
         slackService.sendAlert(message);
     }

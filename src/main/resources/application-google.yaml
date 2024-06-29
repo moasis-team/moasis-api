@@ -10,5 +10,6 @@ spring:
 
 app:
   image-api-url: "https://script.google.com/macros/s"
-  image-server-url: "/AKfycbwZgC4RNZOiNnylHLbk4rdNmaapEh0rshwLVvY3iV0XYFFw-kLqtg9W23D32UvvX_f2/exec"
+  image-creation-path: "/AKfycbwZgC4RNZOiNnylHLbk4rdNmaapEh0rshwLVvY3iV0XYFFw-kLqtg9W23D32UvvX_f2/exec"
+  image-deletion-path: "/AKfycbyGL1KnAAUvfc8nSgMcPwQmPO4_gmrb48jWSoepAvAQSmFnTUJcvV3ms3KfRWz1DaEl/exec"
   google-drive-url: "https://drive.usercontent.google.com"

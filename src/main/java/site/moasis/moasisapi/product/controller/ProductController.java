@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import site.moasis.moasisapi.common.response.CommonResponse;
 import site.moasis.moasisapi.product.dto.CreateProductRequestDTO;
 import site.moasis.moasisapi.product.dto.GetProductResponseDTO;
+import site.moasis.moasisapi.product.dto.PatchProductRequestDTO;
+import site.moasis.moasisapi.product.dto.PatchProductResponseDTO;
 import site.moasis.moasisapi.product.service.ProductService;
 
 @RestController
@@ -41,4 +43,12 @@ public class ProductController {
         return CommonResponse.success(response, "상품 조회 성공");
     }
 
+    @PatchMapping("/{productCode}")
+    public ResponseEntity<CommonResponse<PatchProductResponseDTO>> patchProduct(
+        @PathVariable("productCode") String productCode,
+        @Valid @RequestBody PatchProductRequestDTO patchProductRequestDTO
+    ) {
+        PatchProductResponseDTO response = productService.updateProduct(productCode, patchProductRequestDTO);
+        return CommonResponse.success(response, "상품이 수정되었습니다.");
+    }
 }

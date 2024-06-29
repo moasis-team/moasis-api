@@ -12,6 +12,8 @@ import site.moasis.moasisapi.common.exception.DuplicatedException;
 import site.moasis.moasisapi.common.exception.NotFoundException;
 import site.moasis.moasisapi.product.dto.CreateProductRequestDTO;
 import site.moasis.moasisapi.product.dto.GetProductResponseDTO;
+import site.moasis.moasisapi.product.dto.PatchProductRequestDTO;
+import site.moasis.moasisapi.product.dto.PatchProductResponseDTO;
 import site.moasis.moasisapi.product.entity.Product;
 import site.moasis.moasisapi.product.repository.ProductRepository;
 
@@ -39,13 +41,12 @@ public class ProductService {
             String base64EncodedFile = Base64.getEncoder().encodeToString(createProductRequestDTO.getEncodedFile());
             String imageUrl = imageClient.uploadFile(base64EncodedFile);
             Product product = createProductRequestDTO.toEntity(productCode, imageUrl);
-            System.out.println("product = " + product);
             productRepository.save(product);
             return productCode;
         } catch (Exception e) {
-            slackAlertService.productSaveFailedAlert(
+            slackAlertService.alertFailedProduct(
                 createProductRequestDTO.getName(),
-                createProductRequestDTO.getProductNumber()
+                createProductRequestDTO.getProductNumber(), "Save"
             );
             log.error("Product save failed for product number: {}", createProductRequestDTO.getProductNumber(), e);
             throw e;
@@ -61,6 +62,33 @@ public class ProductService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Slice<Product> response = productRepository.findAllByNameContaining(name, pageable);
         return GetProductResponseDTO.fromSlice(response);
+    }
+
+    @Transactional
+    public PatchProductResponseDTO updateProduct(String productCode, PatchProductRequestDTO patchProductRequestDTO) {
+        Product product = productRepository.findByProductCode(productCode).orElseThrow(() -> new NotFoundException("상품을 찾을 수 없습니다."));
+
+        String imageUrl = updateImage(patchProductRequestDTO, product);
+        Product updatedProduct = product.updateEntity(patchProductRequestDTO, imageUrl);
+        productRepository.save(updatedProduct);
+        return PatchProductResponseDTO.of(updatedProduct);
+    }
+
+    private String updateImage(PatchProductRequestDTO patchProductRequestDTO, Product product) {
+        String oldImageUrl = product.getImageUrl();
+        String imageUrl = oldImageUrl;
+        try {
+            if (patchProductRequestDTO.getEncodedFile() != null) {
+                String base64EncodedFile = Base64.getEncoder().encodeToString(patchProductRequestDTO.getEncodedFile());
+                imageUrl = imageClient.uploadFile(base64EncodedFile);
+                imageClient.deleteFile(oldImageUrl);
+            }
+        } catch (Exception e) {
+            slackAlertService.alertFailedProduct(product.getName(), product.getProductNumber(), "Update");
+            log.error("Product image update failed for product number: {}", product.getProductNumber(), e);
+            throw e;
+        }
+        return imageUrl;
     }
 }
 
