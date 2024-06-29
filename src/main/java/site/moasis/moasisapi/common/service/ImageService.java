@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 import site.moasis.moasisapi.client.ImageClient;
 
@@ -19,18 +20,35 @@ public class ImageService implements ImageClient {
     @Qualifier("imageClient")
     private final WebClient imageClient;
 
-    @Value("${app.image-server-url}")
-    private String imageScriptUrl;
+    @Value("${app.image-creation-path}")
+    private String imageCreationPath;
+
+    @Value("${app.image-deletion-path}")
+    private String imageDeletionPath;
 
     @Override
     public String uploadFile(String encodedFileBase64) {
         return imageClient.post()
-            .uri(imageScriptUrl)
+            .uri(imageCreationPath)
             .body(BodyInserters.fromFormData("myFile", encodedFileBase64)
                 .with("mimeType", "image/png")
                 .with("fileName", "product.png"))
             .exchangeToMono(this::handleRedirect)
             .block();
+    }
+
+    @Override
+    public boolean deleteFile(String imageUrl) {
+        String imageId = imageUrl.split("id=")[1];
+        String requestUri = UriComponentsBuilder.fromUriString(imageDeletionPath)
+            .query("fileId={imageId}")
+            .buildAndExpand(imageId)
+            .toUriString();
+        String responseMessage = imageClient.post()
+            .uri(requestUri)
+            .exchangeToMono(this::handleRedirect)
+            .block();
+        return responseMessage != null;
     }
 
     private Mono<String> handleRedirect(ClientResponse response) {
