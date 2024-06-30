@@ -30,6 +30,13 @@ public class AppConfiguration {
         return webClient(url, objectMapper);
     }
 
+    @Bean
+    @ConditionalOnMissingBean(name = "googleImageProxy")
+    public WebClient googleImageProxy(@Value("${app.google-drive-url:}") String url) {
+        return webClient(url, objectMapper);
+    }
+
+
     private WebClient webClient(String baseURL, ObjectMapper mapper) {
         ExchangeStrategies strategies = ExchangeStrategies.builder()
             .codecs(clientCodecConfigurer -> {
