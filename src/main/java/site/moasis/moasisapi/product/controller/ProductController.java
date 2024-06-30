@@ -1,5 +1,6 @@
 package site.moasis.moasisapi.product.controller;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
@@ -32,7 +33,7 @@ public class ProductController {
 
     @GetMapping()
     public ResponseEntity<CommonResponse<Slice<GetProductResponseDTO>>> getProductList(
-        @RequestParam("query") String query,
+        @RequestParam("query") @Nullable String query,
         @RequestParam("pageNumber") int pageNumber,
         @RequestParam("pageSize") int pageSize
     ) {
