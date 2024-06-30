@@ -24,3 +24,5 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         show_sql: true
         format_sql: true
+cors:
+  allowed-origin-url: "http://localhost:3000"
