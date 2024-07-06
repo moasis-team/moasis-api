@@ -74,6 +74,14 @@ public class ProductService {
         return PatchProductResponseDTO.of(updatedProduct);
     }
 
+    @Transactional
+    public String deleteProduct(String productCode) {
+        Product product = productRepository.findByProductCode(productCode).orElseThrow(() -> new NotFoundException("상품을 찾을 수 없습니다."));
+        imageClient.deleteFile(product.getImageUrl());
+        productRepository.delete(product);
+        return productCode;
+    }
+
     private String updateImage(PatchProductRequestDTO patchProductRequestDTO, Product product) {
         String oldImageUrl = product.getImageUrl();
         String imageUrl = oldImageUrl;
