@@ -51,4 +51,10 @@ public class ProductController {
         PatchProductResponseDTO response = productService.updateProduct(productCode, patchProductRequestDTO);
         return CommonResponse.success(response, "상품이 수정되었습니다.");
     }
+
+    @DeleteMapping("/{productCode}")
+    public ResponseEntity<CommonResponse<String>> deleteProduct(@PathVariable("productCode") String productCode) {
+        String response = productService.deleteProduct(productCode);
+        return CommonResponse.success(response, "상품이 삭제되었습니다.");
+    }
 }
