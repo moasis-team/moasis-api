@@ -5,6 +5,8 @@ import lombok.Getter;
 import org.springframework.data.domain.Slice;
 import site.moasis.moasisapi.product.entity.Product;
 
+import java.time.Instant;
+
 @Getter
 @Builder
 public class GetProductResponseDTO {
@@ -16,6 +18,7 @@ public class GetProductResponseDTO {
     private int quantity;
     private String productCode;
     private String productNumber;
+    private Instant updatedAt;
 
     public static Slice<GetProductResponseDTO> fromSlice(Slice<Product> products) {
         return products.map(product -> GetProductResponseDTO.builder()
@@ -27,6 +30,7 @@ public class GetProductResponseDTO {
             .quantity(product.getQuantity())
             .productCode(product.getProductCode())
             .productNumber(product.getProductNumber())
+            .updatedAt(product.getUpdatedAt())
             .build()
         );
     }
@@ -41,6 +45,7 @@ public class GetProductResponseDTO {
             .quantity(product.getQuantity())
             .productCode(product.getProductCode())
             .productNumber(product.getProductNumber())
+            .updatedAt(product.getUpdatedAt())
             .build();
     }
 }
