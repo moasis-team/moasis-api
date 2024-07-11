@@ -14,8 +14,18 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByProductCode(String productCode);
 
-    @Query("SELECT p FROM Product p WHERE :name IS NULL OR p.name LIKE %:name%")
-    Slice<Product> findAllByNameContaining(@Param("name") String name, Pageable pageable);
+    @Query(
+        value = "SELECT p FROM Product p WHERE " +
+            "(:name IS NULL || p.name LIKE %:name%) AND " +
+            "(:category IS NULL || p.category LIKE %:category%) AND " +
+            "(:productNumber IS NULL || p.productNumber LIKE %:productNumber%)"
+    )
+    Slice<Product> findByMultipleCriteria(
+        @Param("name") String name,
+        @Param("category") String category,
+        @Param("productNumber") String productNumber,
+        Pageable pageable
+    );
 
     Boolean existsByProductNumber(String productNumber);
 }

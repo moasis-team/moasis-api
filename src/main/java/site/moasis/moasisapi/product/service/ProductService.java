@@ -58,9 +58,9 @@ public class ProductService {
         return GetProductResponseDTO.of(product);
     }
 
-    public Slice<GetProductResponseDTO> getProductList(String name, int pageNumber, int pageSize) {
+    public Slice<GetProductResponseDTO> getProductList(String name, String category, String productNumber, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Slice<Product> response = productRepository.findAllByNameContaining(name, pageable);
+        Slice<Product> response = productRepository.findByMultipleCriteria(name, category, productNumber, pageable);
         return GetProductResponseDTO.fromSlice(response);
     }
 
