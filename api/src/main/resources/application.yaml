@@ -1,0 +1,52 @@
+logging:
+  level:
+    root: info
+
+server:
+  port: 8080
+  shutdown: graceful
+  error: # default error attribute for prod profile
+    include-exception: false # Include the "exception" attribute.
+    include-stacktrace: never # When to include a "stacktrace" attribute. possible value is 'always, never, on_param'
+    whitelabel.enabled: false
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+  security:
+    user:
+      name: 'Admin'
+      password: '1234'
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate.ddl-auto: create-drop
+    properties:
+      hibernate.default_batch_fetch_size: 10
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      hibernate.jdbc.batch_size: 50
+      hibernate.jdbc.batch_versioned_data: true
+      hibernate.jdbc.time_zone: Asia/Seoul
+  config:
+    import:
+      - classpath:/application-google.yaml
+      - classpath:/application-h2.yaml
+      - classpath:/application-slack.yaml
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+  packages-to-scan: site.moasis.api
+
+cors:
+  allowed-origins:
+    - "http://localhost:3000"
+
