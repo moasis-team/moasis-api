@@ -13,11 +13,9 @@ java {
     }
 }
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
+bootJar.enabled = true
+
+jar.enabled = true
 
 repositories {
     mavenCentral()
@@ -39,3 +37,5 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+tasks.register("prepareKotlinBuildScriptModel") {}

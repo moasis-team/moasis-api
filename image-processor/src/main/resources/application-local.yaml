@@ -1,0 +1,13 @@
+server:
+  port: 8181
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/moasis
+    username: root
+    password: secret
+    driver-class-name: org.postgresql.Driver
+
+springdoc:
+  api-docs.enabled: true
+  swagger-ui.enabled: true
