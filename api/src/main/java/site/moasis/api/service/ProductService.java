@@ -13,7 +13,6 @@ import site.moasis.common.client.ImageClient;
 import site.moasis.common.dto.CreateProductRequestDTO;
 import site.moasis.common.dto.GetProductResponseDTO;
 import site.moasis.common.dto.PatchProductRequestDTO;
-import site.moasis.common.dto.PatchProductResponseDTO;
 import site.moasis.common.entity.Product;
 import site.moasis.common.repository.ProductRepository;
 import site.moasis.common.service.SlackAlertService;
@@ -31,7 +30,7 @@ public class ProductService {
     private final SlackAlertService slackAlertService;
 
     @Transactional
-    public String createProduct(CreateProductRequestDTO createProductRequestDTO) {
+    public Product createProduct(CreateProductRequestDTO createProductRequestDTO) {
 
         if (productRepository.existsByProductNumber(createProductRequestDTO.getProductNumber())) {
             throw new DuplicatedException("상품 번호가 이미 존재합니다");
@@ -42,8 +41,9 @@ public class ProductService {
             String base64EncodedFile = Base64.getEncoder().encodeToString(createProductRequestDTO.getEncodedFile());
             String imageUrl = imageClient.uploadFile(base64EncodedFile);
             Product product = createProductRequestDTO.toEntity(productCode, imageUrl);
+
             productRepository.save(product);
-            return productCode;
+            return product;
         } catch (Exception e) {
             slackAlertService.alertFailedProduct(
                 createProductRequestDTO.getName(),
@@ -66,19 +66,18 @@ public class ProductService {
     }
 
     @Transactional
-    public PatchProductResponseDTO updateProduct(String productCode, PatchProductRequestDTO patchProductRequestDTO) {
+    public Product updateProduct(String productCode, PatchProductRequestDTO patchProductRequestDTO) {
         Product product = productRepository.findByProductCode(productCode).orElseThrow(() -> new NotFoundException("상품을 찾을 수 없습니다."));
         String imageUrl = updateImage(patchProductRequestDTO, product);
-        Product updatedProduct = product.updateEntity(patchProductRequestDTO, imageUrl);
-        return PatchProductResponseDTO.of(updatedProduct);
+        return product.updateEntity(patchProductRequestDTO, imageUrl);
     }
 
     @Transactional
-    public String deleteProduct(String productCode) {
+    public Product deleteProduct(String productCode) {
         Product product = productRepository.findByProductCode(productCode).orElseThrow(() -> new NotFoundException("상품을 찾을 수 없습니다."));
         imageClient.deleteFile(product.getImageUrl());
         productRepository.delete(product);
-        return productCode;
+        return product;
     }
 
     private String updateImage(PatchProductRequestDTO patchProductRequestDTO, Product product) {

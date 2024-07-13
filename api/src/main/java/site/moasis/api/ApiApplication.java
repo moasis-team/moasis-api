@@ -18,7 +18,6 @@ import java.util.Map;
 @EnableJpaRepositories(basePackages = {"site.moasis.common.repository"})
 @EntityScan(basePackages = {"site.moasis.common.entity"})
 public class ApiApplication {
-
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(ApiApplication.class);
         Map<String, Object> defaultProperties = new HashMap<>();
