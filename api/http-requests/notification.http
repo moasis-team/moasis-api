@@ -1,0 +1,15 @@
+### get notifications
+GET http://localhost:8080/api/notifications?pageNumber=0&pageSize=10
+
+### read notifications
+POST http://localhost:8080/api/notifications/read
+Content-Type: application/json
+
+{
+  "notificationKeys": [
+    "{{notificationKey}}"
+  ]
+}
+
+### exist unread notifications
+GET http://localhost:8080/api/notifications/exist-unread
