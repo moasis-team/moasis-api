@@ -46,7 +46,4 @@ springdoc:
     enabled: false
   packages-to-scan: site.moasis.api
 
-cors:
-  allowed-origins:
-    - "http://localhost:3000"
 
