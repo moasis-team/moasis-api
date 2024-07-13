@@ -1,0 +1,6 @@
+spring:
+  config:
+    - classpath:/application-google.yaml
+    - classpath:/application-h2.yaml
+    - classpath:/application-slack.yaml
+

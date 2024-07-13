@@ -10,3 +10,12 @@ spring:
 
 app:
   slack-alert-url: "https://hooks.slack.com/services/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"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+app:
+  slack-alert-url: "https://hooks.slack.com/services/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"

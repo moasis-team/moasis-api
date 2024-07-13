@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'jacoco'
+    id 'org.sonarqube' version '5.0.0.4638'
     id 'org.springframework.boot' version '3.3.0'
     id 'io.spring.dependency-management' version '1.1.5'
 }
@@ -12,6 +14,10 @@ java {
         languageVersion = JavaLanguageVersion.of(17)
     }
 }
+
+bootJar.enabled = false
+
+jar.enabled = true
 
 configurations {
     compileOnly {
@@ -34,8 +40,58 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'com.h2database:h2'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+    reportsDirectory = layout.buildDirectory.dir('jacoco')
+}
+
+jacocoTestReport {
+    reports {
+        html.required = true
+        xml.required = false
+        csv.required = false
+
+        html.outputLocation = layout.buildDirectory.dir('jacoco/jacocoHtml')
+    }
+
+    dependsOn test
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification {
+    def Qdomains = []
+
+    for (qPattern in '*.QA'..'*.QZ') {
+        Qdomains.add(qPattern + '*')
+    }
+
+    violationRules {
+        rule {
+            enabled = true
+            element = 'CLASS'
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.00
+            }
+
+            excludes = ["*Command", "*Query"] + Qdomains
+        }
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "moasis-api"
+        property "sonar.projectName", "moasis-api"
+    }
 }
