@@ -9,7 +9,7 @@ spring:
       on-profile: local
 
 app:
-  slack-alert-url: "https://hooks.slack.com/services/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"
+  slack-alert-url: "https://hooks.slack.com/services/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"
 
 ---
 spring:
@@ -18,4 +18,4 @@ spring:
       on-profile: test
 
 app:
-  slack-alert-url: "https://hooks.slack.com/services/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"
+  slack-alert-url: "https://hooks.slack.com/services/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"
