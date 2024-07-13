@@ -16,9 +16,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(
         value = "SELECT p FROM Product p WHERE " +
-            "(:name IS NULL OR p.name LIKE CONCAT('%', :name, '%')) AND " +
-            "(:category IS NULL OR p.category LIKE CONCAT('%', :category, '%')) AND " +
-            "(:productNumber IS NULL OR p.productNumber LIKE CONCAT('%', :productNumber, '%'))"
+            "(:name IS NULL OR p.name LIKE %:name%) AND " +
+            "(:category IS NULL OR p.category LIKE %:category%) AND " +
+            "(:productNumber IS NULL OR p.productNumber LIKE %:productNumber%)"
     )
     Slice<Product> findByMultipleCriteria(
         @Param("name") String name,
