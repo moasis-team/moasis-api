@@ -1,0 +1,46 @@
+name: Code Analysis
+run-name: SonarQube Run Static Code Analysis to ${{ inputs.environment }} by @${{ github.triggering_actor }}
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  sonar:
+    name: Static Analysis
+    runs-on:
+      group: moasis-runners
+      labels: ubuntu-22-04-4core
+    permissions: read-all
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: ./gradlew api:bootJar sonar --info
