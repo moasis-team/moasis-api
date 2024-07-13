@@ -18,7 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         value = "SELECT p FROM Product p WHERE " +
             "(:name IS NULL OR p.name LIKE %:name%) AND " +
             "(:category IS NULL OR p.category LIKE %:category%) AND " +
-            "(:productNumber IS NULL OR p.productNumber LIKE %:productNumber%)"
+            "(:productNumber IS NULL OR p.productNumber= :productNumber)"
     )
     Slice<Product> findByMultipleCriteria(
         @Param("name") String name,
