@@ -1,12 +1,20 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate.dialect: org.hibernate.dialect.H2Dialect
+      ddl-auto: create-drop
+    generate-ddl: true
+  datasource:
+    write:
+      hikari:
+        jdbc-url: jdbc:h2:mem:test;DATABASE_TO_LOWER=true;CASE_INSENSITIVE_IDENTIFIERS=true;MODE=PostgreSQL;
+        username: sa
+        password:
+        poolName: write
+        auto-commit: false
+    read-only:
+      hikari:
+        jdbc-url: jdbc:h2:mem:test;DATABASE_TO_LOWER=true;CASE_INSENSITIVE_IDENTIFIERS=true;MODE=PostgreSQL;
+        username: sa
+        password:
+        poolName: read
+        auto-commit: false
