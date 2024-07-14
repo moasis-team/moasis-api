@@ -18,4 +18,4 @@ spring:
       on-profile: test
 
 app:
-  slack-alert-url: "https://hooks.slack.com/services/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"
+  slack-alert-url: ""
