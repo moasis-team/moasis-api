@@ -16,7 +16,4 @@ spring:
       hibernate.jdbc.batch_size: 50
       hibernate.jdbc.batch_versioned_data: true
       hibernate.jdbc.time_zone: Asia/Seoul
-  config:
-    - classpath:/application-google.yaml
-    - classpath:/application-slack.yaml
 
