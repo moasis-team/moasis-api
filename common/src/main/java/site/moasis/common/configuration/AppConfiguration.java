@@ -42,6 +42,7 @@ public class AppConfiguration {
             .codecs(clientCodecConfigurer -> {
                 clientCodecConfigurer.defaultCodecs().jackson2JsonEncoder(new Jackson2JsonEncoder(mapper));
                 clientCodecConfigurer.defaultCodecs().jackson2JsonDecoder(new Jackson2JsonDecoder(mapper));
+                clientCodecConfigurer.defaultCodecs().maxInMemorySize(512*1024);
             })
             .build();
         return WebClient.builder()
