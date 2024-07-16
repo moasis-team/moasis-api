@@ -1,0 +1,45 @@
+### create product
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "name",
+  "price": 1,
+  "details": "details",
+  "encodedFile": [
+    1,
+    1,
+    1
+  ],
+  "category": "category",
+  "quantity": 10,
+  "productNumber": "productNumber"
+}
+
+### get product
+GET http://localhost:8080/api/products/{{productCode}}
+
+### get all products
+GET http://localhost:8080/api/products?pageNumber=0&pageSize=10
+
+### get all products by category and name
+GET http://localhost:8080/api/products?category=category&name=name&pageNumber=0&pageSize=10
+
+### patch product
+PATCH http://localhost:8080/api/products/{{productCode}}
+Content-Type: application/json
+
+{
+  "name": "name2",
+  "encodedFile": [
+    1,
+    1,
+    1
+  ],
+  "category": "category",
+  "quantity": 10,
+  "productNumber": "productNumber"
+}
+
+### delete product
+DELETE http://localhost:8080/api/products/{{productCode}}
