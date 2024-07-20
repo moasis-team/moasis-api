@@ -38,3 +38,6 @@ out/
 
 ### local yaml files ###
 resources/application-local.yaml
+
+### jib container version info ###
+.env
