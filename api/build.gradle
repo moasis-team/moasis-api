@@ -9,11 +9,17 @@ ext {
 }
 
 group = 'site.moasis'
-version = '0.0.1-SNAPSHOT'
+version = rootProject.version
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+jib {
+    container {
+        ports = ['8080']
     }
 }
 
