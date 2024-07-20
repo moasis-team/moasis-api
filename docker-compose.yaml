@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  moasis-api:
+    image: moasis/moasis-api:${VERSION}
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://moasis:5432/moasis
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=secret
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+    depends_on:
+      - moasis
+
+  moasis-image:
+    image: moasis/moasis-image:${VERSION}
+    ports:
+      - "8181:8181"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://moasis:5432/moasis
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=secret
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      - moasis
+
+  moasis:
+    image: postgres:14-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: moasis
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
