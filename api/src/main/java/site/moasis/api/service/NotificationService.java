@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.moasis.api.factory.NotificationFactory;
 import site.moasis.common.dto.GetNotificationListDTO;
 import site.moasis.common.dto.SetNotificationListAsReadRequestDTO;
 import site.moasis.common.entity.Notification;
@@ -22,13 +23,14 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class NotificationService {
     private final NotificationRepository notificationRepository;
-    private final NotificationStatusKeyService notificationStatusKeyService;
+    private final NotificationReadStatusKeyService notificationStatusKeyService;
+    private final NotificationFactory notificationFactory;
 
-    public Slice<GetNotificationListDTO> getNotificationList(int pageNumber, int pageSize) {
+    public GetNotificationListDTO getNotificationList(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Slice<Notification> response = notificationRepository.findAllByOrderByCreatedAtDesc(pageable);
+        Slice<Notification> notificationSlice = notificationRepository.findAllByOrderByCreatedAtDesc(pageable);
 
-        return GetNotificationListDTO.fromSlice(response);
+        return notificationFactory.createGetNotificationListDTOFromSlice(notificationSlice);
     }
 
     @Transactional
@@ -36,8 +38,8 @@ public class NotificationService {
         List<Notification> notificationList = Arrays.stream(readNotificationRequestDTO.getNotificationKeys()).map(notificationRepository::findByKey).toList();
         if (notificationList.get(0) == null) return new String[0];
 
-        String[] notificationReadStatusKeyList = notificationList.stream().map(Notification::getNotificationReadStatusKey).toArray(String[]::new);
-        Arrays.stream(notificationReadStatusKeyList).forEach(key -> notificationStatusKeyService.setNotificationStatus(key, true));
+        String[] notificationIdArray = notificationList.stream().map(Notification::getId).toArray(String[]::new);
+        Arrays.stream(notificationIdArray).forEach(id -> notificationStatusKeyService.setNotificationReadStatus(id, true));
 
         return readNotificationRequestDTO.getNotificationKeys();
     }
@@ -45,7 +47,6 @@ public class NotificationService {
     @Transactional
     public void createNotification(NotificationType notificationType, Product product, int changedAmount) {
         String notificationKey = UUID.randomUUID().toString();
-        String notificationReadStatusKey = notificationStatusKeyService.createNotificationReadStatusKey();
 
         Notification notification = Notification.builder()
             .key(notificationKey)
@@ -54,9 +55,9 @@ public class NotificationService {
             .type(notificationType)
             .remainingQuantity(product.getQuantity())
             .changedAmount(changedAmount)
-            .notificationReadStatusKey(notificationReadStatusKey)
             .build();
 
+        notificationStatusKeyService.createNotificationReadStatus(notificationKey);
         notificationRepository.save(notification);
     }
 
