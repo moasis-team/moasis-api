@@ -8,16 +8,11 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class NotificationStatusKeyService {
+public class NotificationReadStatusKeyService {
     private final RedisTemplate<String, Boolean> redisTemplate;
 
-    public void setNotificationStatus(String notificationReadStatusKey, boolean isRead) {
-        redisTemplate.opsForValue().set(notificationReadStatusKey, isRead);
-    }
-
-    public String createNotificationReadStatusKey() {
-        Long sequence = redisTemplate.opsForValue().increment("notificationIsRead" + ":seq");
-        return "notificationIsRead" + ":" + sequence;
+    public void setNotificationReadStatus(String notificationId, boolean isRead) {
+        redisTemplate.opsForValue().set(notificationId, isRead);
     }
 
     public boolean existUnreadNotification() {
@@ -29,5 +24,15 @@ public class NotificationStatusKeyService {
             if (value != null) return true;
         }
         return false;
+    }
+
+    public void createNotificationReadStatus(String notificationKey) {
+        redisTemplate.opsForValue().set(notificationKey, Boolean.FALSE);
+    }
+
+    public boolean getIsRead(String notificationKey) {
+        Boolean isRead = redisTemplate.opsForValue().get(notificationKey);
+        if (isRead == null) return false;
+        return isRead;
     }
 }

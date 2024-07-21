@@ -1,7 +1,6 @@
 package site.moasis.api.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.moasis.api.response.CommonResponse;
@@ -17,11 +16,11 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @GetMapping
-    public ResponseEntity<CommonResponse<Slice<GetNotificationListDTO>>> getNotificationList(
+    public ResponseEntity<CommonResponse<GetNotificationListDTO>> getNotificationList(
         @RequestParam("pageNumber") int pageNumber,
         @RequestParam("pageSize") int pageSize
     ) {
-        Slice<GetNotificationListDTO> response = notificationService.getNotificationList(pageNumber, pageSize);
+        GetNotificationListDTO response = notificationService.getNotificationList(pageNumber, pageSize);
         return CommonResponse.success(response, "활동 알림 조회에 성공했습니다.");
     }
 
