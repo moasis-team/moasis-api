@@ -4,7 +4,6 @@ plugins {
     id 'org.sonarqube' version '5.0.0.4638'
     id 'org.springframework.boot' version '3.3.0'
     id 'io.spring.dependency-management' version '1.1.5'
-    id 'com.google.cloud.tools.jib' version '3.1.4' apply false
 }
 
 group = 'site.moasis'
@@ -28,56 +27,6 @@ configurations {
         extendsFrom annotationProcessor
     }
 }
-
-subprojects {
-    apply plugin: 'java'
-    apply plugin: 'com.google.cloud.tools.jib'
-    version = rootProject.version
-    jib {
-        from {
-            image = 'openjdk:17-slim'
-        }
-        to {
-            image = "moasis/${project.name}:${version}"
-        }
-        container {
-            ports = ['8080']
-            files {
-                path '/app/resources'
-                from 'src/main/resources'
-                include 'application*.yaml'
-            }
-            jvmFlags = [
-                    '-Dspring.config.location=classpath:/application.yaml'
-            ]
-        }
-    }
-}
-
-task writeVersionToEnv {
-    doLast {
-        def envFile = file('.env')
-        envFile.text = "VERSION=${version}\n"
-    }
-}
-
-allprojects {
-    afterEvaluate {
-        // Ensure the task runs before jib tasks
-        tasks.withType(com.google.cloud.tools.jib.gradle.JibTask) {
-            dependsOn writeVersionToEnv
-        }
-    }
-}
-
-task setDockerComposeEnv {
-    doLast {
-        def version = project.version
-        file('.env').text = "VERSION=${version}"
-    }
-}
-
-build.dependsOn setDockerComposeEnv
 
 repositories {
     mavenCentral()
