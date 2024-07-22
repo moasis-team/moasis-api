@@ -23,7 +23,7 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
-    hibernate.ddl-auto: create-drop
+    hibernate.ddl-auto: update
     properties:
       hibernate.default_batch_fetch_size: 10
       hibernate.cache.use_second_level_cache: false

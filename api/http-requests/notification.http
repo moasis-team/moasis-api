@@ -6,10 +6,10 @@ POST http://localhost:8080/api/notifications/read
 Content-Type: application/json
 
 {
-  "notificationKeys": [
+  "keys": [
     "{{notificationKey}}"
   ]
 }
 
-### exist unread notifications
-GET http://localhost:8080/api/notifications/exist-unread
+### notification alarm
+GET http://localhost:8080/api/notifications/alarm
