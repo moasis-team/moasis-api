@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.moasis.common.dto.PatchProductRequestDTO;
+import site.moasis.common.dto.ProductDto;
 
 @Entity
 @Builder
@@ -32,7 +32,7 @@ public class Product extends BaseEntity {
     @Column(unique = true)
     private String productNumber;
 
-    public Product updateEntity(PatchProductRequestDTO toUpdate, String imageUrl) {
+    public Product updateEntity(ProductDto.UpdateRequest toUpdate, String imageUrl) {
         this.name = toUpdate.getName() != null ? toUpdate.getName() : this.name;
         this.price = toUpdate.getPrice() != null ? toUpdate.getPrice() : this.price;
         this.category = toUpdate.getCategory() != null ? toUpdate.getCategory() : this.category;
